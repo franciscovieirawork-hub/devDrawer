@@ -94,6 +94,7 @@ export function Whiteboard({ plannerId, initialContent }: WhiteboardProps) {
         options={{ maxPages: 1 }}
         forceMobile={false}
         inferDarkMode={false}
+        licenseKey={process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY}
       />
     </div>
   );
