@@ -22,10 +22,7 @@ export function CreatePlannerPopover({ onCreated }: CreatePlannerPopoverProps) {
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(e.target as Node)
-      ) {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         setOpen(false);
         setTitle("");
         setError("");
@@ -39,7 +36,6 @@ export function CreatePlannerPopover({ onCreated }: CreatePlannerPopoverProps) {
   }, [open]);
 
   async function handleSubmit(e: React.FormEvent) {
-
     e.preventDefault();
     if (!title.trim()) return;
 
@@ -82,11 +78,7 @@ export function CreatePlannerPopover({ onCreated }: CreatePlannerPopoverProps) {
           stroke="currentColor"
           strokeWidth={2}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
         New Planner
       </button>
@@ -104,9 +96,7 @@ export function CreatePlannerPopover({ onCreated }: CreatePlannerPopoverProps) {
               className="w-full h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-sm placeholder:text-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] transition-all"
             />
 
-            {error && (
-              <p className="mt-2 text-xs text-red-500">{error}</p>
-            )}
+            {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
 
             <div className="flex gap-2 mt-3">
               <button

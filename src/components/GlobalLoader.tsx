@@ -14,9 +14,7 @@ export function GlobalLoader() {
           <div className="absolute inset-0 rounded-full border-2 border-[var(--border)]" />
           <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[var(--accent)] animate-spin" />
         </div>
-        <p className="text-sm text-[var(--muted-foreground)] animate-pulse">
-          Loading...
-        </p>
+        <p className="text-sm text-[var(--muted-foreground)] animate-pulse">Loading...</p>
       </div>
     </div>
   );

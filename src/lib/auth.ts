@@ -7,9 +7,7 @@ const SESSION_DURATION_DAYS = 30;
 
 export async function createSession(userId: string) {
   const token = randomBytes(32).toString("hex");
-  const expiresAt = new Date(
-    Date.now() + SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000
-  );
+  const expiresAt = new Date(Date.now() + SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000);
 
   const session = await prisma.session.create({
     data: {

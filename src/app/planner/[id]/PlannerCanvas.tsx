@@ -103,11 +103,15 @@ export function PlannerCanvas({
             stroke="currentColor"
             strokeWidth={2}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5L8.25 12l7.5-7.5"
+            />
           </svg>
         </Link>
         <div className="h-5 w-px bg-[var(--border)]" />
-        
+
         {isRenaming ? (
           <input
             ref={renameInputRef}

@@ -115,10 +115,7 @@ export async function PATCH(request: Request) {
 
       const passwordValidation = validatePassword(body.newPassword);
       if (!passwordValidation.isValid) {
-        return NextResponse.json(
-          { error: passwordValidation.error },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: passwordValidation.error }, { status: 400 });
       }
 
       updateData.passwordHash = await bcrypt.hash(body.newPassword, 12);
@@ -138,9 +135,6 @@ export async function PATCH(request: Request) {
       },
     });
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

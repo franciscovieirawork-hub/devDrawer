@@ -63,10 +63,7 @@ export async function PATCH(
 
     return NextResponse.json({ planner: updated });
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }
 

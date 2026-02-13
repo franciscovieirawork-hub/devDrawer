@@ -12,10 +12,7 @@ export async function POST(request: Request) {
     const { username, email, password } = await request.json();
 
     if (!username || !email || !password) {
-      return NextResponse.json(
-        { error: "All fields are required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "All fields are required." }, { status: 400 });
     }
 
     if (!isValidEmail(email)) {
@@ -41,10 +38,7 @@ export async function POST(request: Request) {
 
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
-      return NextResponse.json(
-        { error: passwordValidation.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: passwordValidation.error }, { status: 400 });
     }
 
     const existingEmail = await prisma.user.findUnique({
@@ -89,16 +83,13 @@ export async function POST(request: Request) {
     await createSession(user.id);
 
     return NextResponse.json(
-      { 
+      {
         user: { id: user.id, email: user.email, username: user.username },
-        message: "Account created. Please check your email to verify your account."
+        message: "Account created. Please check your email to verify your account.",
       },
       { status: 201 }
     );
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

@@ -6,139 +6,29 @@ import Link from "next/link";
 import { CreatePlannerPopover } from "@/components/CreatePlannerPopover";
 import { PlannerCardMenu } from "@/components/PlannerCardMenu";
 import Footer from "@/components/Footer";
-
-interface Planner {
-  id: string;
-  title: string;
-  description: string | null;
-  createdAt: string;
-}
-
-interface User {
-  id: string;
-  email: string;
-  username: string;
-}
-
-type SortBy = "date" | "name";
+import { DashboardHook } from "./dashboard.hook";
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [planners, setPlanners] = useState<Planner[]>([]);
-  const [sortBy, setSortBy] = useState<SortBy>("date");
-  const [deleting, setDeleting] = useState<string | null>(null);
-  const [duplicating, setDuplicating] = useState<string | null>(null);
-  const [renaming, setRenaming] = useState<string | null>(null);
-  const [renameValue, setRenameValue] = useState<string>("");
-  const renameInputRef = useRef<HTMLInputElement>(null);
-  const [loading, setLoading] = useState(true);
-
-  const fetchData = useCallback(async () => {
-    try {
-      const [userRes, plannersRes] = await Promise.all([
-        fetch("/api/me"),
-        fetch("/api/planner"),
-      ]);
-
-      if (!userRes.ok) {
-        router.push("/login");
-        return;
-      }
-
-      const userData = await userRes.json();
-      const plannersData = await plannersRes.json();
-
-      setUser(userData.user);
-      setPlanners(plannersData.planners || []);
-    } catch {
-      router.push("/login");
-    } finally {
-      setLoading(false);
-    }
-  }, [router]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    if (renaming && renameInputRef.current) {
-      renameInputRef.current.focus();
-      renameInputRef.current.select();
-    }
-  }, [renaming]);
-
-  const sortedPlanners = [...planners].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.title.localeCompare(b.title);
-    }
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-
-  async function handleDelete(id: string) {
-    setDeleting(id);
-    try {
-      const res = await fetch(`/api/planner/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        setPlanners((prev) => prev.filter((p) => p.id !== id));
-      }
-    } finally {
-      setDeleting(null);
-    }
-  }
-
-  async function handleDuplicate(id: string) {
-    setDuplicating(id);
-    try {
-      const res = await fetch(`/api/planner/${id}`, { method: "POST" });
-      if (res.ok) {
-        const data = await res.json();
-        setPlanners((prev) => [data.planner, ...prev]);
-        router.push(`/planner/${data.planner.id}`);
-      }
-    } finally {
-      setDuplicating(null);
-    }
-  }
-
-  function handleRenameClick(id: string) {
-    const planner = planners.find((p) => p.id === id);
-    if (planner) {
-      setRenaming(id);
-      setRenameValue(planner.title);
-    }
-  }
-
-  async function handleRenameSave(id: string) {
-    const newTitle = renameValue.trim();
-    if (!newTitle) {
-      setRenaming(null);
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/planner/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newTitle }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setPlanners((prev) =>
-          prev.map((p) => (p.id === id ? { ...p, title: data.planner.title } : p))
-        );
-      }
-    } finally {
-      setRenaming(null);
-      setRenameValue("");
-    }
-  }
-
-  function handleCreated(planner: { id: string; title: string }) {
-    router.push(`/planner/${planner.id}`);
-  }
+  const {
+    user,
+    planners,
+    sortBy,
+    setSortBy,
+    deleting,
+    duplicating,
+    renaming,
+    renameValue,
+    renameInputRef,
+    loading,
+    handleDelete,
+    handleDuplicate,
+    handleRenameClick,
+    handleRenameSave,
+    handleCreated,
+    setRenaming,
+    setRenameValue,
+    sortedPlanners,
+  } = DashboardHook();
 
   if (loading) {
     return (
@@ -208,11 +98,11 @@ export default function DashboardPage() {
                 d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
               />
             </svg>
-            <p className="text-[var(--muted-foreground)] mb-1">
-              No planners yet
-            </p>
+            <p className="text-[var(--muted-foreground)] mb-1">No planners yet</p>
             <p className="text-sm text-[var(--muted-foreground)]">
-              Click <span className="font-medium text-[var(--foreground)]">New Planner</span> to get started
+              Click{" "}
+              <span className="font-medium text-[var(--foreground)]">New Planner</span> to
+              get started
             </p>
           </div>
         ) : (
@@ -242,10 +132,7 @@ export default function DashboardPage() {
                   />
                 ) : (
                   <>
-                    <Link
-                      href={`/planner/${planner.id}`}
-                      className="block"
-                    >
+                    <Link href={`/planner/${planner.id}`} className="block">
                       <h3 className="font-semibold text-[var(--card-foreground)] pr-8">
                         {planner.title}
                       </h3>

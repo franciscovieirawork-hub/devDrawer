@@ -62,10 +62,16 @@ export function Whiteboard({ plannerId, initialContent }: WhiteboardProps) {
       });
 
       // Load saved content
-      if (initialContent && typeof initialContent === "object" && "store" in initialContent) {
+      if (
+        initialContent &&
+        typeof initialContent === "object" &&
+        "store" in initialContent
+      ) {
         try {
           editor.store.loadStoreSnapshot(
-            initialContent as unknown as Parameters<typeof editor.store.loadStoreSnapshot>[0]
+            initialContent as unknown as Parameters<
+              typeof editor.store.loadStoreSnapshot
+            >[0]
           );
         } catch (err) {
           console.error("Failed to load saved content:", err);

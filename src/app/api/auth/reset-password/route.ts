@@ -16,10 +16,7 @@ export async function POST(request: Request) {
 
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
-      return NextResponse.json(
-        { error: passwordValidation.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: passwordValidation.error }, { status: 400 });
     }
 
     const user = await prisma.user.findFirst({
@@ -32,10 +29,7 @@ export async function POST(request: Request) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Invalid or expired token." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid or expired token." }, { status: 400 });
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
@@ -51,9 +45,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, message: "Password reset successfully." });
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

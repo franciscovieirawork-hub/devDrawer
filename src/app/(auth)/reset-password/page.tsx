@@ -86,9 +86,7 @@ export default function ResetPasswordPage() {
         <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-[var(--foreground)] mb-2">
           Reset password
         </h2>
-        <p className="text-sm text-[var(--muted-foreground)]">
-          Enter your new password
-        </p>
+        <p className="text-sm text-[var(--muted-foreground)]">Enter your new password</p>
       </div>
 
       {form.error && (

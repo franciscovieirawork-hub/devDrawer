@@ -6,10 +6,7 @@ export async function GET(request: Request) {
   const token = searchParams.get("token");
 
   if (!token) {
-    return NextResponse.json(
-      { error: "Token is required." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Token is required." }, { status: 400 });
   }
 
   const user = await prisma.user.findFirst({
@@ -22,10 +19,7 @@ export async function GET(request: Request) {
   });
 
   if (!user) {
-    return NextResponse.json(
-      { error: "Invalid or expired token." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Invalid or expired token." }, { status: 400 });
   }
 
   await prisma.user.update({

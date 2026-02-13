@@ -9,10 +9,7 @@ export async function POST(request: Request) {
     const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: "Email is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email is required." }, { status: 400 });
     }
 
     if (!isValidEmail(email)) {
@@ -47,9 +44,6 @@ export async function POST(request: Request) {
       message: "If an account exists, a password reset email has been sent.",
     });
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

@@ -30,10 +30,7 @@ export async function POST(request: Request) {
     const { title, description } = await request.json();
 
     if (!title) {
-      return NextResponse.json(
-        { error: "Title is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Title is required." }, { status: 400 });
     }
 
     const planner = await prisma.planner.create({
@@ -46,9 +43,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ planner }, { status: 201 });
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

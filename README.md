@@ -25,6 +25,7 @@
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 19** - UI library
 - **Next.js 16** (App Router) - React framework with SSR/SSG
 - **TypeScript** - Type-safe JavaScript
@@ -34,6 +35,7 @@
 - **Geist Font** - Modern typography
 
 ### Backend
+
 - **Next.js API Routes** - Serverless API endpoints
 - **Prisma 7** - Modern ORM for database access
 - **PostgreSQL** - Relational database
@@ -41,6 +43,7 @@
 - **Resend** - Email delivery service
 
 ### Infrastructure
+
 - **Vercel** - Hosting and deployment
 - **Neon** - Serverless PostgreSQL database
 - **Docker** - Local database containerization
@@ -102,19 +105,22 @@ devdrawer/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/devdrawer.git
    cd devdrawer
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
-   
+
    Create a `.env` file in the root directory:
+
    ```env
    DATABASE_URL="postgresql://devdrawer:devdrawer123@localhost:5432/devdrawer?schema=public"
    RESEND_API_KEY="your_resend_api_key"
@@ -123,16 +129,19 @@ devdrawer/
    ```
 
 4. **Start the database**
+
    ```bash
    npm run db:up
    ```
 
 5. **Run database migrations**
+
    ```bash
    npm run db:migrate
    ```
 
 6. **Start the development server**
+
    ```bash
    npm run dev
    ```
@@ -141,18 +150,18 @@ devdrawer/
 
 ## 📜 Available Scripts
 
-| Script | Description |
-|-------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run db:up` | Start PostgreSQL (Docker) |
-| `npm run db:down` | Stop PostgreSQL (Docker) |
-| `npm run db:migrate` | Run Prisma migrations (dev) |
+| Script                      | Description                        |
+| --------------------------- | ---------------------------------- |
+| `npm run dev`               | Start development server           |
+| `npm run build`             | Build for production               |
+| `npm run start`             | Start production server            |
+| `npm run lint`              | Run ESLint                         |
+| `npm run db:up`             | Start PostgreSQL (Docker)          |
+| `npm run db:down`           | Stop PostgreSQL (Docker)           |
+| `npm run db:migrate`        | Run Prisma migrations (dev)        |
 | `npm run db:migrate:deploy` | Run Prisma migrations (production) |
-| `npm run db:studio` | Open Prisma Studio (DB GUI) |
-| `npm run db:generate` | Generate Prisma Client |
+| `npm run db:studio`         | Open Prisma Studio (DB GUI)        |
+| `npm run db:generate`       | Generate Prisma Client             |
 
 ## 🔐 Authentication Flow
 
@@ -180,6 +189,7 @@ devdrawer/
 ## 🎨 Features in Detail
 
 ### Whiteboard (tldraw)
+
 - Drawing tools (pen, highlighter)
 - Shapes (rectangles, circles, arrows, etc.)
 - Text editing with formatting
@@ -190,6 +200,7 @@ devdrawer/
 - Auto-save every few seconds
 
 ### Planner Management
+
 - Create new planners with title and description
 - Rename planners inline (click on title)
 - Duplicate planners (creates copy with "(copy)" suffix)
@@ -198,6 +209,7 @@ devdrawer/
 - Responsive grid layout
 
 ### User Profile
+
 - View account information
 - Update username
 - Change email (requires re-verification)
@@ -207,6 +219,7 @@ devdrawer/
 ## 🗄️ Database Schema
 
 ### User
+
 - `id` - Unique identifier
 - `username` - Unique username
 - `email` - Unique email address
@@ -217,12 +230,14 @@ devdrawer/
 - `createdAt` / `updatedAt` - Timestamps
 
 ### Session
+
 - `id` - Unique identifier
 - `token` - Session token
 - `userId` - Foreign key to User
 - `expiresAt` - Expiration timestamp
 
 ### Planner
+
 - `id` - Unique identifier
 - `title` - Planner title
 - `description` - Optional description
@@ -235,6 +250,7 @@ devdrawer/
 ### Vercel Deployment
 
 1. **Push to GitHub**
+
    ```bash
    git push origin main
    ```
@@ -244,8 +260,9 @@ devdrawer/
    - Vercel will auto-detect Next.js
 
 3. **Configure Environment Variables**
-   
+
    In Vercel dashboard → Settings → Environment Variables:
+
    ```
    DATABASE_URL=postgresql://...?sslmode=require
    RESEND_API_KEY=re_xxxxx
@@ -254,8 +271,9 @@ devdrawer/
    ```
 
 4. **Deploy Database Migrations**
-   
+
    Run migrations on production database:
+
    ```bash
    DATABASE_URL="your_production_db_url" npm run db:migrate:deploy
    ```
@@ -285,11 +303,12 @@ devdrawer/
 ## 🎯 Password Requirements
 
 Passwords must meet all of the following:
+
 - Minimum 10 characters
 - At least one uppercase letter (A-Z)
 - At least one lowercase letter (a-z)
 - At least one number (0-9)
-- At least one special character (!@#$%^&*...)
+- At least one special character (!@#$%^&\*...)
 
 ## 📧 Email Configuration
 
@@ -308,16 +327,19 @@ Passwords must meet all of the following:
 ## 🐛 Troubleshooting
 
 ### Database Connection Issues
+
 - Ensure Docker is running: `npm run db:up`
 - Check DATABASE_URL in `.env`
 - Verify database is accessible: `npm run db:studio`
 
 ### Migration Errors
+
 - Ensure database is running
 - Check Prisma schema matches migrations
 - Try: `npm run db:generate` then `npm run db:migrate`
 
 ### Build Errors
+
 - Clear `.next` folder: `rm -rf .next`
 - Regenerate Prisma Client: `npm run db:generate`
 - Reinstall dependencies: `rm -rf node_modules && npm install`

@@ -24,11 +24,10 @@ export const useAppStore = create<AppStore>()(
     (set, get) => ({
       theme: "light",
       setTheme: (theme) => set({ theme }),
-      toggleTheme: () =>
-        set({ theme: get().theme === "light" ? "dark" : "light" }),
+      toggleTheme: () => set({ theme: get().theme === "light" ? "dark" : "light" }),
       getThemeImage: () => {
         const currentTheme = get().theme;
-        return currentTheme === "dark" 
+        return currentTheme === "dark"
           ? "/assets/intro_lightmode.png"
           : "/assets/intro_darkmode.png";
       },

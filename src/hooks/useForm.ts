@@ -19,7 +19,9 @@ export interface UseFormReturn<T extends Record<string, string>> {
   setValues: (values: Partial<T> | ((prev: T) => T)) => void;
   setError: (message: string) => void;
   setErrors: (errors: FieldErrors<T>) => void;
-  handleChange: (field: keyof T) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleChange: (
+    field: keyof T
+  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   loading: boolean;
   error: string;
@@ -42,14 +44,11 @@ export function useForm<T extends Record<string, string>>(
     });
   }, []);
 
-  const setValues = useCallback(
-    (payload: Partial<T> | ((prev: T) => T)) => {
-      setValuesState((prev) =>
-        typeof payload === "function" ? payload(prev) : { ...prev, ...payload }
-      );
-    },
-    []
-  );
+  const setValues = useCallback((payload: Partial<T> | ((prev: T) => T)) => {
+    setValuesState((prev) =>
+      typeof payload === "function" ? payload(prev) : { ...prev, ...payload }
+    );
+  }, []);
 
   const handleChange = useCallback(
     (field: keyof T) =>

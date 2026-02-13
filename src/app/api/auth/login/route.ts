@@ -8,10 +8,7 @@ export async function POST(request: Request) {
     const { identifier, password } = await request.json();
 
     if (!identifier || !password) {
-      return NextResponse.json(
-        { error: "All fields are required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "All fields are required." }, { status: 400 });
     }
 
     const isEmail = identifier.includes("@");
@@ -22,19 +19,13 @@ export async function POST(request: Request) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Invalid credentials." },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordMatch) {
-      return NextResponse.json(
-        { error: "Invalid credentials." },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
     }
 
     await createSession(user.id);
@@ -43,9 +34,6 @@ export async function POST(request: Request) {
       user: { id: user.id, email: user.email, username: user.username },
     });
   } catch {
-    return NextResponse.json(
-      { error: "Internal server error." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

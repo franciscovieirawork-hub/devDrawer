@@ -49,7 +49,8 @@ export default function ProfilePage() {
     validate,
     onSubmit: async (values) => {
       const updateData: Record<string, string> = {};
-      if (user && values.username !== user.username) updateData.username = values.username;
+      if (user && values.username !== user.username)
+        updateData.username = values.username;
       if (user && values.email !== user.email) updateData.email = values.email;
       if (values.newPassword) {
         updateData.currentPassword = values.currentPassword;
