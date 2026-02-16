@@ -27,26 +27,49 @@ export const DashboardHook = () => {
   const [renameValue, setRenameValue] = useState<string>("");
   const renameInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
+    setError(null);
     try {
       const [userRes, plannersRes] = await Promise.all([
         fetch("/api/me"),
         fetch("/api/planner"),
       ]);
 
-      if (!userRes.ok) {
+      // Only redirect to login if user is not authenticated (401)
+      if (userRes.status === 401) {
         router.push("/login");
         return;
       }
 
-      const userData = await userRes.json();
-      const plannersData = await plannersRes.json();
+      if (!userRes.ok) {
+        setError("Failed to load user data. Please try again.");
+        setLoading(false);
+        return;
+      }
 
+      const userData = await userRes.json();
       setUser(userData.user);
-      setPlanners(plannersData.planners || []);
-    } catch {
-      router.push("/login");
+
+      // Handle planners response - don't redirect on error, just show message
+      if (!plannersRes.ok) {
+        if (plannersRes.status === 401) {
+          router.push("/login");
+          return;
+        }
+        // For other errors (500, etc), show error message but don't redirect
+        const errorData = await plannersRes.json().catch(() => ({ error: "Unknown error" }));
+        setError(errorData.error || "Failed to load planners. Please try again.");
+        setPlanners([]);
+      } else {
+        const plannersData = await plannersRes.json();
+        setPlanners(plannersData.planners || []);
+      }
+    } catch (err) {
+      // Network errors or JSON parsing errors
+      setError("Failed to load data. Please check your connection and try again.");
+      setPlanners([]);
     } finally {
       setLoading(false);
     }
@@ -145,6 +168,8 @@ export const DashboardHook = () => {
     renameValue,
     renameInputRef,
     loading,
+    error,
+    fetchData, // Expose for retry
     handleDelete,
     handleDuplicate,
     handleRenameClick,

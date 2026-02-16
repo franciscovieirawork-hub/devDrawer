@@ -20,6 +20,8 @@ export default function DashboardPage() {
     renameValue,
     renameInputRef,
     loading,
+    error,
+    fetchData,
     handleDelete,
     handleDuplicate,
     handleRenameClick,
@@ -81,9 +83,46 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Error message */}
+      {error && (
+        <div className="mb-4 px-4 py-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-sm flex items-center justify-between">
+          <span>{error}</span>
+          <button
+            onClick={fetchData}
+            className="ml-4 px-3 py-1 text-xs font-medium bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
+          >
+            Try again
+          </button>
+        </div>
+      )}
+
       {/* Scrollable planners area - ends 20px above footer */}
       <div className="flex-1 min-h-0 overflow-y-auto pb-5">
-        {planners.length === 0 ? (
+        {error && planners.length === 0 ? (
+          <div className="text-center py-16 rounded-2xl border border-dashed border-[var(--border)] bg-[var(--card)]">
+            <svg
+              className="w-12 h-12 mx-auto text-[var(--muted-foreground)] mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+              />
+            </svg>
+            <p className="text-[var(--muted-foreground)] mb-1">Failed to load planners</p>
+            <p className="text-sm text-[var(--muted-foreground)] mb-4">{error}</p>
+            <button
+              onClick={fetchData}
+              className="px-4 py-2 text-sm font-medium bg-[var(--foreground)] text-[var(--background)] rounded-lg hover:opacity-90 transition-opacity"
+            >
+              Try again
+            </button>
+          </div>
+        ) : planners.length === 0 ? (
           <div className="text-center py-16 rounded-2xl border border-dashed border-[var(--border)] bg-[var(--card)]">
             <svg
               className="w-12 h-12 mx-auto text-[var(--muted-foreground)] mb-4"

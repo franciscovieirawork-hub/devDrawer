@@ -4,18 +4,26 @@ import { NextResponse } from "next/server";
 
 // List planners for the user
 export async function GET() {
-  const user = await getCurrentUser();
+  try {
+    const user = await getCurrentUser();
 
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+    }
+
+    const planners = await prisma.planner.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json({ planners });
+  } catch (error) {
+    console.error("Error fetching planners:", error);
+    return NextResponse.json(
+      { error: "Failed to load planners. Please try again." },
+      { status: 500 }
+    );
   }
-
-  const planners = await prisma.planner.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-  });
-
-  return NextResponse.json({ planners });
 }
 
 // Create new planner
