@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { redirect, notFound } from "next/navigation";
+import { getPlannerWithAccess, canEdit } from "@/lib/planner-access";
 import { PlannerCanvas } from "@/app/planner/[id]/PlannerCanvas";
 
 export default async function PlannerPage({
@@ -16,21 +16,29 @@ export default async function PlannerPage({
 
   const { id } = await params;
 
-  const planner = await prisma.planner.findUnique({
-    where: { id },
-  });
+  const result = await getPlannerWithAccess(id, user);
 
-  if (!planner || planner.userId !== user.id) {
+  if (!result) {
     notFound();
   }
 
+  const { planner, role } = result;
   const content = planner.content as Record<string, unknown> | null;
+  const readOnly = !canEdit(role);
 
   return (
     <PlannerCanvas
       plannerId={planner.id}
       plannerTitle={planner.title}
       initialContent={content}
+      role={role}
+      readOnly={readOnly}
+      isPublic={planner.isPublic ?? false}
+      publicSlug={planner.publicSlug ?? null}
+      currentUser={{
+        id: user.id,
+        displayName: user.username || user.email,
+      }}
     />
   );
 }
