@@ -24,7 +24,8 @@ export default function LoginPage() {
         form.setError(data.error || "Something went wrong.");
         return;
       }
-      router.push("/dashboard");
+      // Force full page reload to ensure cookie is available
+      window.location.href = "/dashboard";
     },
   });
 
